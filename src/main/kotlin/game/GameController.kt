@@ -2,78 +2,80 @@ package game
 
 import entities.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
+import tiles.TileSet
+import java.awt.Color
+import java.awt.Graphics
 
 class GameController {
 
-    private val mapGrid = MapGrid(20, 20)
-    private val entitiesTurnQueue = TurnQueue()
-    private val _entities = mutableListOf<Entity>()
-    val entities: List<Entity>
-        get() = _entities.toList()
-
     private val scope = CoroutineScope(Dispatchers.IO)
 
-    init {
-        loadMap()
-    }
+    private val tileSet = TileSet(
+        tilesetPath = "../tileset.png"
+    )
 
-    private fun loadMap() {
-        (0 until 20).forEach { x ->
-            (0 until 20).forEach { y ->
-                val grassEntity = Grass(
-                    position = MutableStateFlow(
-                        Position(
-                            x = x,
-                            y = y
-                        )
-                    )
-                )
-                mapGrid.trackEntity(grassEntity)
-                _entities.add(grassEntity)
-            }
-        }
+    private val mapState = MapState(
+        columns = 20,
+        rows = 20
+    )
 
-        val playerEntity = Player(
-            position = MutableStateFlow(
-                Position(
-                    x = 10,
-                    y = 10
-                ),
-            ),
-            mapGrid = mapGrid
-        )
-
-        mapGrid.trackEntity(playerEntity)
-        entitiesTurnQueue.add(playerEntity)
-        _entities.add(playerEntity)
-
-        val monsterEntity = Monster(
-            position = MutableStateFlow(
-                Position(
-                    x = 9,
-                    y = 9
-                )
-            ),
-            mapGrid = mapGrid
-        )
-
-        mapGrid.trackEntity(monsterEntity)
-        entitiesTurnQueue.add(monsterEntity)
-        _entities.add(monsterEntity)
+    private val turnQueue = TurnQueue().apply {
+        add(mapState.player)
+        add(mapState.monster)
     }
 
     fun start(
         render: () -> Unit
     ) {
         scope.launch {
-            while (entitiesTurnQueue.isNotEmpty()) {
+            while (turnQueue.isNotEmpty()) {
                 render()
                 delay(200L)
-                val dequeued = entitiesTurnQueue.poll()
-                dequeued.getAction().run()
-                entitiesTurnQueue.add(dequeued)
+                val dequeued = turnQueue.poll()
+                dequeued.getAction(mapState).run()
+                turnQueue.add(dequeued)
             }
         }
+    }
+
+    fun render(
+        graphics: Graphics,
+        renderWidth: Int,
+        renderHeight: Int
+    ) {
+        val tileWidth = renderWidth / mapState.columns
+        val tileHeight = renderHeight / mapState.rows
+        mapState.renderables.forEach { renderable ->
+            render(graphics, renderable, tileWidth, tileHeight)
+        }
+
+        graphics.color = Color.WHITE
+    }
+
+    private fun render(
+        graphics: Graphics,
+        renderable: Renderable,
+        tileWidth: Int,
+        tileHeight: Int
+    ) {
+        val tileDimensions = tileSet.getTileDimensions(renderable.tile)
+        graphics.drawRect(
+            renderable.position.value.x  * tileWidth,
+            renderable.position.value.y * tileHeight,
+            tileWidth,
+            tileHeight
+        )
+        graphics.drawImage(
+            tileSet.image,
+            renderable.position.value.x * tileWidth,
+            renderable.position.value.y * tileHeight,
+            renderable.position.value.x * tileWidth + tileWidth,
+            renderable.position.value.y * tileHeight + tileHeight,
+            tileDimensions.left,
+            tileDimensions.top,
+            tileDimensions.right,
+            tileDimensions.bottom,
+            null
+        )
     }
 }

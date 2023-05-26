@@ -5,11 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7341f360-70d5-43c1-ba35-21c4363a61ec" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/algorithms/EntityPresenceMatrix.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/entities/Renderable.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/entities/Trackable.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/entities/Wall.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/game/MapState.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/MapGrid.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/MapGrid.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/actions/Action.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/actions/Action.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/actions/ActionMove.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/actions/ActionMove.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/algorithms/Djikstra.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/algorithms/Djikstra.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/Entity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/Entity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/MapGrid.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/Monster.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/Monster.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/Player.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/Player.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/TurnTakingEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/TurnTakingEntity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/game/GameController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/game/GameController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/game/TurnQueue.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/game/TurnQueue.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/swing/panels/GamePanel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/swing/panels/GamePanel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/tiles/Tile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/tiles/Tile.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/tiles/TileRenderer.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/tiles/TileSet.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/tiles/TileSet.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,6 +164,27 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="Roguelike [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="Roguelike [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -180,6 +216,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.Roguelike [clean]" />
         <item itemvalue="Gradle.Roguelike [build]" />
         <item itemvalue="Gradle.Roguelike [jar]" />
       </list>
@@ -200,9 +237,10 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/main/kotlin/entities/Monster.kt</url>
-          <line>32</line>
-          <option name="timeStamp" value="10" />
+          <condition expression="debug" language="kotlin" />
+          <url>file://$PROJECT_DIR$/src/main/kotlin/algorithms/EntityPresenceMatrix.kt</url>
+          <line>48</line>
+          <option name="timeStamp" value="25" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

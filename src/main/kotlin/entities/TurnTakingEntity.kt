@@ -1,9 +1,11 @@
 package entities
 
 import actions.Action
+import game.MapState
 
 abstract class TurnTakingEntity : Entity() {
     abstract val speed: Int
-    abstract val mapGrid: MapGrid
-    abstract fun getAction() : Action
+    abstract fun getAction(
+        mapState: MapState
+    ) : Action
 }

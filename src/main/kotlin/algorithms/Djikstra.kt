@@ -8,8 +8,8 @@ class Djikstra {
     fun floodFill(
         width: Int,
         height: Int,
-        goals: List<Position>,
-        obstacles: List<Position>
+        goalMatrix: EntityPresenceMatrix,
+        obstacleMatrix: EntityPresenceMatrix
     ) : Array<Array<Int>>{
         fun getNeighbours(
             closedGrid: Array<Array<Int>>,
@@ -28,9 +28,6 @@ class Djikstra {
             return neighbours
         }
 
-        val goalGrid = createGrid(width, height, goals, false)
-        val obstacleGrid = createGrid(width, height, obstacles, true)
-
         val djikstraGrid = Array(width) { rows ->
             Array(height) { cell ->
                 Int.MAX_VALUE
@@ -39,9 +36,9 @@ class Djikstra {
 
         val startingPositions = mutableListOf<Position>()
         val frontier = LinkedList<Position>()
-        val closedGrid = obstacleGrid.copyOf()
+        val closedGrid = obstacleMatrix.costs
 
-        goalGrid.forEachIndexed { x, row ->
+        goalMatrix.costs.forEachIndexed { x, row ->
             row.forEachIndexed { y, cell ->
                 if (cell == 0) {
                     djikstraGrid[x][y] = 0
@@ -70,22 +67,5 @@ class Djikstra {
         }
 
         return djikstraGrid
-    }
-
-    private fun createGrid(
-        width: Int,
-        height: Int,
-        positions: List<Position>,
-        isObstacles: Boolean
-    ) : Array<Array<Int>> {
-        val maskPositionMap = positions.associateWith {
-            if (isObstacles) 1 else 0
-        }
-        val inputGrid = Array(width) { x ->
-            Array(height) { y ->
-                maskPositionMap[Position(x, y)] ?: if (isObstacles) 0 else 1
-            }
-        }
-        return inputGrid
     }
 }

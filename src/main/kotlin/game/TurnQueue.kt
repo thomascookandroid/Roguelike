@@ -5,7 +5,6 @@ import entities.TurnTakingEntity
 import java.util.*
 
 class TurnQueue {
-
     private data class PrioritisedEntity(
         val entity: TurnTakingEntity,
         val heapKey: HeapKey

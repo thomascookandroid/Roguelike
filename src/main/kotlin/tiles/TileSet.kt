@@ -42,6 +42,7 @@ class TileSet(
     private val tilePositionMap = mapOf(
         Tile.NONE to TilePosition(0, 0),
         Tile.GRASS to TilePosition(5, 0),
+        Tile.WALL to TilePosition(23, 3),
         Tile.PLAYER to TilePosition(26, 0),
         Tile.MONSTER to TilePosition(29, 6)
     )
