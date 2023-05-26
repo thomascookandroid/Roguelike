@@ -5,19 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7341f360-70d5-43c1-ba35-21c4363a61ec" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/algorithms/Djikstra.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/MapGrid.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/MapGrid.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/Monster.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/Monster.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/Player.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/Player.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/game/MapController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/game/GameController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/input/InputManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/input/InputManager.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/rendering/MapRenderer.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/rendering/TileRenderer.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/game/GameController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/game/GameController.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/swing/panels/GamePanel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/swing/panels/GamePanel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/tiles/Tile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/tiles/Tile.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/tiles/TileSet.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/tiles/TileSet.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -208,9 +200,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/main/kotlin/swing/panels/GamePanel.kt</url>
-          <line>38</line>
-          <option name="timeStamp" value="8" />
+          <url>file://$PROJECT_DIR$/src/main/kotlin/entities/Monster.kt</url>
+          <line>32</line>
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

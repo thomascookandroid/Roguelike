@@ -24,6 +24,24 @@ class MapGrid(
         )
     }
 
+    val player: Player?
+        get() = cells.flatMap { rows ->
+            rows.flatMap { cell ->
+                cell.map { entity ->
+                    entity
+                }
+            }
+        }.filterIsInstance<Player>().firstOrNull()
+
+    val monsters: List<Monster>
+        get() = cells.flatMap { rows ->
+            rows.flatMap { cell ->
+                cell.map { entity ->
+                    entity
+                }
+            }
+        }.filterIsInstance<Monster>()
+
     private val cells = Array(width) {
         Array(height) {
             TreeSet<Entity> { a, b ->

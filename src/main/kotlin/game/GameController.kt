@@ -76,11 +76,4 @@ class GameController {
             }
         }
     }
-
-    fun getCostGrid() : Array<Array<Int>> {
-        return mapGrid.getCostGrid(
-            listOf(Position(0, 0), Position(6, 4), Position(3, 3)),
-            listOf(Position(9, 9), Position(9, 10), Position(9, 11))
-        )
-    }
 }

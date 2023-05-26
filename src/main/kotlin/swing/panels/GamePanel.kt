@@ -19,31 +19,26 @@ class GamePanel : JPanel() {
         super.paintComponent(graphics)
         val tileWidth = width / 20
         val tileHeight = height / 20
-//        gameController.entities.forEach { entity ->
-//            val tileDimensions = tileSet.getTileDimensions(entity.tile)
-//            graphics.drawImage(
-//                tileSet.image,
-//                entity.position.value.x * tileWidth,
-//                entity.position.value.y * tileHeight,
-//                entity.position.value.x * tileWidth + tileWidth,
-//                entity.position.value.y * tileHeight + tileHeight,
-//                tileDimensions.left,
-//                tileDimensions.top,
-//                tileDimensions.right,
-//                tileDimensions.bottom,
-//                null
-//            )
-//        }
-        val costGrid = gameController.getCostGrid()
-        graphics.color = Color.WHITE
-        costGrid.forEachIndexed { x, rows ->
-            rows.forEachIndexed { y, cell ->
-                graphics.drawString(
-                    cell.toString(),
-                    x * tileWidth + tileWidth / 2,
-                    y * tileHeight + tileHeight / 2
-                )
-            }
+        gameController.entities.forEach { entity ->
+            val tileDimensions = tileSet.getTileDimensions(entity.tile)
+            graphics.drawRect(
+                entity.position.value.x  * tileWidth,
+                entity.position.value.y * tileHeight,
+                tileWidth,
+                tileHeight
+            )
+            graphics.drawImage(
+                tileSet.image,
+                entity.position.value.x * tileWidth,
+                entity.position.value.y * tileHeight,
+                entity.position.value.x * tileWidth + tileWidth,
+                entity.position.value.y * tileHeight + tileHeight,
+                tileDimensions.left,
+                tileDimensions.top,
+                tileDimensions.right,
+                tileDimensions.bottom,
+                null
+            )
         }
     }
 
