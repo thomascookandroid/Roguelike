@@ -4,16 +4,15 @@ import entities.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class MapController {
+class GameController {
 
     private val mapGrid = MapGrid(20, 20)
     private val entitiesTurnQueue = TurnQueue()
     private val _entities = mutableListOf<Entity>()
-
-    private val scope = CoroutineScope(Dispatchers.IO)
-
     val entities: List<Entity>
         get() = _entities.toList()
+
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     init {
         loadMap()
@@ -59,7 +58,6 @@ class MapController {
             mapGrid = mapGrid
         )
 
-
         mapGrid.trackEntity(monsterEntity)
         entitiesTurnQueue.add(monsterEntity)
         _entities.add(monsterEntity)
@@ -69,13 +67,20 @@ class MapController {
         render: () -> Unit
     ) {
         scope.launch {
-            while (entitiesTurnQueue.isNotEmpty() && isActive) {
+            while (entitiesTurnQueue.isNotEmpty()) {
+                render()
+                delay(200L)
                 val dequeued = entitiesTurnQueue.poll()
                 dequeued.getAction().run()
                 entitiesTurnQueue.add(dequeued)
-                render()
-                delay(200)
             }
         }
+    }
+
+    fun getCostGrid() : Array<Array<Int>> {
+        return mapGrid.getCostGrid(
+            listOf(Position(0, 0), Position(6, 4), Position(3, 3)),
+            listOf(Position(9, 9), Position(9, 10), Position(9, 11))
+        )
     }
 }

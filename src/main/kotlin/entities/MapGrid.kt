@@ -1,5 +1,6 @@
 package entities
 
+import algorithms.Djikstra
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -9,6 +10,19 @@ class MapGrid(
     val width: Int,
     val height: Int
 ) {
+    private val djikstra = Djikstra()
+
+    fun getCostGrid(
+        attractors: List<Position>,
+        obstacles: List<Position>
+    ) : Array<Array<Int>> {
+        return djikstra.floodFill(
+            width,
+            height,
+            attractors,
+            obstacles
+        )
+    }
 
     private val cells = Array(width) {
         Array(height) {
