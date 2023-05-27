@@ -2,6 +2,7 @@ package entities
 
 import actions.Action
 import actions.ActionMove
+import algorithms.EntityPresenceMatrix
 import game.MapState
 import input.CommandCode
 import input.InputManager
@@ -19,11 +20,47 @@ data class Player(
     ) : Action {
         return InputManager.consumeCurrentInput()?.let { commandCode ->
             when (commandCode) {
-                CommandCode.COMMAND_LEFT -> ActionMove(-1, 0, this)
-                CommandCode.COMMAND_UP -> ActionMove(0, -1, this)
-                CommandCode.COMMAND_RIGHT -> ActionMove(1, 0, this)
-                CommandCode.COMMAND_DOWN -> ActionMove(0, 1, this)
+                CommandCode.COMMAND_LEFT -> moveActionIfValid(
+                    mapState.obstacleEntityPresenceMatrix,
+                    -1,
+                    0
+                )
+                CommandCode.COMMAND_UP -> moveActionIfValid(
+                    mapState.obstacleEntityPresenceMatrix,
+                    0,
+                    -1
+                )
+                CommandCode.COMMAND_RIGHT -> moveActionIfValid(
+                    mapState.obstacleEntityPresenceMatrix,
+                    1,
+                    0
+                )
+                CommandCode.COMMAND_DOWN -> moveActionIfValid(
+                    mapState.obstacleEntityPresenceMatrix,
+                    0,
+                    1
+                )
             }
         } ?: getAction(mapState)
+    }
+
+    private fun moveActionIfValid(
+        obstacleEntityPresenceMatrix: EntityPresenceMatrix,
+        dx: Int,
+        dy: Int
+    ) : ActionMove? = if (isMoveValid(obstacleEntityPresenceMatrix, dx, dy)) {
+        ActionMove(dx, dy, this)
+    } else {
+        null
+    }
+
+    private fun isMoveValid(
+        obstacleEntityPresenceMatrix: EntityPresenceMatrix,
+        dx: Int,
+        dy: Int
+    ) : Boolean {
+        val newX = position.value.x + dx
+        val newY = position.value.y + dy
+        return obstacleEntityPresenceMatrix.costs[newX][newY] == 0
     }
 }

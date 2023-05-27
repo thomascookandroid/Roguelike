@@ -1,6 +1,7 @@
 package entities
 
 import actions.Action
+import actions.ActionAttack
 import actions.ActionMove
 import actions.ActionNone
 import algorithms.Djikstra
@@ -23,6 +24,28 @@ data class Monster(
         mapState: MapState
     ): Action {
         delay(50)
+
+        return if (isAdjacent(this, mapState.player)) {
+            ActionAttack()
+        } else {
+            moveToPlayerAction(mapState) ?: ActionNone()
+        }
+    }
+
+    private fun isAdjacent(
+        a: Entity,
+        b: Entity
+    ) : Boolean {
+        val (ax, ay) = a.position.value
+        val (bx, by) = b.position.value
+        val dx = abs(ax - bx)
+        val dy = abs(ay - by)
+        return dx < 2 && dy < 2
+    }
+
+    private fun moveToPlayerAction(
+        mapState: MapState
+    ) : ActionMove? {
         val moveToPlayerCostGrid = Djikstra().floodFill(
             mapState.columns,
             mapState.rows,
@@ -30,11 +53,18 @@ data class Monster(
             mapState.obstacleEntityPresenceMatrix
         )
 
-        val downhillNeighbours = cheapestNeighbours(position.value.x, position.value.y, moveToPlayerCostGrid, mapState)
+        val downhillNeighbours = cheapestNeighbours(
+            position.value.x,
+            position.value.y,
+            moveToPlayerCostGrid, mapState
+        )
+
         return downhillNeighbours.sortedBy { (x, y) ->
-            sqrt(
-                abs((mapState.player.position.value.x.toDouble()) - x.toDouble()).pow(2.0)
-                + abs((mapState.player.position.value.y.toDouble()) - y.toDouble()).pow(2.0)
+            cartesianDistance(
+                mapState.player.position.value.x,
+                mapState.player.position.value.y,
+                x,
+                y
             )
         }.firstOrNull()?.let { moveTo ->
             return ActionMove(
@@ -42,8 +72,17 @@ data class Monster(
                 moveTo.y - position.value.y,
                 this
             )
-        } ?: ActionNone()
+        }
     }
+
+    private fun cartesianDistance(
+        ax: Int,
+        ay: Int,
+        bx: Int,
+        by: Int
+    ) = sqrt(
+        abs(ax.toDouble() - bx.toDouble()).pow(2.0) + abs(ay.toDouble() - by.toDouble()).pow(2.0)
+    ).toInt()
 
     private fun cheapestNeighbours(
         x: Int,
