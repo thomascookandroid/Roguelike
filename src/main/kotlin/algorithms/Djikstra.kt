@@ -3,6 +3,8 @@ package algorithms
 import entities.Position
 import java.util.LinkedList
 
+const val IMPASSABLE = Int.MAX_VALUE
+
 class Djikstra {
 
     fun floodFill(
@@ -30,7 +32,7 @@ class Djikstra {
 
         val djikstraGrid = Array(width) { rows ->
             Array(height) { cell ->
-                Int.MAX_VALUE
+                IMPASSABLE
             }
         }
 

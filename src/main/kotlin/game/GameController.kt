@@ -1,5 +1,6 @@
 package game
 
+import algorithms.EntityPresenceMatrix
 import entities.*
 import kotlinx.coroutines.*
 import tiles.TileSet
@@ -21,7 +22,7 @@ class GameController {
 
     private val turnQueue = TurnQueue().apply {
         add(mapState.player)
-        add(mapState.monster)
+        add(mapState.monsters)
     }
 
     fun start(
@@ -30,7 +31,6 @@ class GameController {
         scope.launch {
             while (turnQueue.isNotEmpty()) {
                 render()
-                delay(200L)
                 val dequeued = turnQueue.poll()
                 dequeued.getAction(mapState).run()
                 turnQueue.add(dequeued)
@@ -49,7 +49,30 @@ class GameController {
             render(graphics, renderable, tileWidth, tileHeight)
         }
 
-        graphics.color = Color.WHITE
+        visualiseEntityPresenceMatrix(
+            mapState.obstacleEntityPresenceMatrix,
+            graphics,
+            tileWidth,
+            tileHeight
+        )
+    }
+
+    private fun visualiseEntityPresenceMatrix(
+        entityPresenceMatrix: EntityPresenceMatrix,
+        graphics: Graphics,
+        tileWidth: Int,
+        tileHeight: Int
+    ) {
+        graphics.color = Color.RED
+        entityPresenceMatrix.costs.forEachIndexed { x, rows ->
+            rows.forEachIndexed { y, cell ->
+                graphics.drawString(
+                    cell.toString(),
+                    x * tileWidth + tileWidth / 2,
+                    y * tileHeight + tileHeight / 2
+                )
+            }
+        }
     }
 
     private fun render(

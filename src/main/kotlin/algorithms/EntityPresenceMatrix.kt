@@ -7,9 +7,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 
 class EntityPresenceMatrix(
-    width: Int,
-    height: Int,
-    private val inverted: Boolean = false
+    private val width: Int,
+    private val height: Int,
+    private val inverted: Boolean = false,
+    otherTrackables: Flow<List<Trackable>> = flowOf(emptyList())
 ) {
 
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -32,9 +33,24 @@ class EntityPresenceMatrix(
     fun track(
         trackables: List<Trackable>
     ) {
-        trackables.forEach { trackable ->
-            track(trackable)
-        }
+        latestTrackables.value = latestTrackables.value.plus(trackables)
+    }
+
+    private val latestTrackables = MutableStateFlow<List<Trackable>>(listOf())
+    private val combinedTrackables = latestTrackables.combine(otherTrackables) { a, b ->
+        a.plus(b)
+    }
+
+    init {
+        combinedTrackables.onEach { trackables ->
+            trackables.forEach { trackable ->
+                track(trackable)
+            }
+        }.launchIn(scope)
+
+        otherTrackables.onEach { trackable ->
+            println(trackable)
+        }.launchIn(scope)
     }
 
     fun track(
@@ -46,6 +62,7 @@ class EntityPresenceMatrix(
                 Pair(acc.second, new)
             }
         ).onEach { (old, new) ->
+            // TODO: Figure out how to deal with concurrency of multiple trackables writing to same grid position
             old?.also { (x, y) ->
                 _costs[x][y] = if (inverted) {
                     1
@@ -62,4 +79,13 @@ class EntityPresenceMatrix(
             }
         }.launchIn(scope)
     }
+
+    fun merge(other: EntityPresenceMatrix) = EntityPresenceMatrix(
+        width = width,
+        height = height,
+        inverted = inverted,
+        otherTrackables = this.latestTrackables.combine(other.latestTrackables) { a, b ->
+            a.plus(b)
+        }
+    )
 }

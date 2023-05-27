@@ -14,7 +14,7 @@ data class Player(
     override val drawPriority: Int = 1,
     override val speed: Int = 100
 ): TurnTakingEntity(), Trackable {
-    override tailrec fun getAction(
+    override tailrec suspend fun getAction(
         mapState: MapState
     ) : Action {
         return InputManager.consumeCurrentInput()?.let { commandCode ->

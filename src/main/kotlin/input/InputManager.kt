@@ -4,10 +4,12 @@ import java.awt.AWTEvent
 import java.awt.Toolkit
 import java.awt.event.AWTEventListener
 import java.awt.event.KeyEvent
+import java.util.*
 import java.util.concurrent.ConcurrentSkipListSet
+import java.util.concurrent.CopyOnWriteArraySet
 
 object InputManager {
-    private val inputSet = ConcurrentSkipListSet<InputCode>()
+    private val inputSet = Collections.synchronizedSet<InputCode>(mutableSetOf())
 
     private val eventListener = AWTEventListener { event ->
         if (event is KeyEvent) {
@@ -38,17 +40,20 @@ object InputManager {
 
     fun consumeCurrentInput() : CommandCode? {
         val mappedCommand = if (inputSet.contains(InputCode.LEFT_ARROW)) {
+            inputSet.clear()
             CommandCode.COMMAND_LEFT
         } else if (inputSet.contains(InputCode.UP_ARROW)) {
+            inputSet.clear()
             CommandCode.COMMAND_UP
         } else if (inputSet.contains(InputCode.RIGHT_ARROW)) {
+            inputSet.clear()
             CommandCode.COMMAND_RIGHT
         } else if (inputSet.contains(InputCode.DOWN_ARROW)) {
+            inputSet.clear()
             CommandCode.COMMAND_DOWN
         } else {
             null
         }
-        inputSet.clear()
         return mappedCommand
     }
 }

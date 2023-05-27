@@ -2,8 +2,11 @@ package entities
 
 import actions.Action
 import actions.ActionMove
+import actions.ActionNone
 import algorithms.Djikstra
+import algorithms.IMPASSABLE
 import game.MapState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import tiles.Tile
 import kotlin.math.abs
@@ -16,28 +19,30 @@ data class Monster(
     override val drawPriority: Int = 1,
     override val speed: Int = 200
 ): TurnTakingEntity(), Trackable {
-    override fun getAction(
+    override suspend fun getAction(
         mapState: MapState
     ): Action {
+        delay(50)
         val moveToPlayerCostGrid = Djikstra().floodFill(
             mapState.columns,
             mapState.rows,
             mapState.playerEntityPresenceMatrix,
-            mapState.wallEntityPresenceMatrix
+            mapState.obstacleEntityPresenceMatrix
         )
 
         val downhillNeighbours = cheapestNeighbours(position.value.x, position.value.y, moveToPlayerCostGrid, mapState)
-        val moveTo = downhillNeighbours.sortedBy { (x, y) ->
+        return downhillNeighbours.sortedBy { (x, y) ->
             sqrt(
-                abs((mapState.player?.position?.value?.x?.toDouble() ?: 0.0) - x.toDouble()).pow(2.0)
-                + abs((mapState.player?.position?.value?.y?.toDouble() ?: 0.0) - y.toDouble()).pow(2.0)
+                abs((mapState.player.position.value.x.toDouble()) - x.toDouble()).pow(2.0)
+                + abs((mapState.player.position.value.y.toDouble()) - y.toDouble()).pow(2.0)
             )
-        }.first()
-        return ActionMove(
-            moveTo.x - position.value.x,
-            moveTo.y - position.value.y,
-            this
-        )
+        }.firstOrNull()?.let { moveTo ->
+            return ActionMove(
+                moveTo.x - position.value.x,
+                moveTo.y - position.value.y,
+                this
+            )
+        } ?: ActionNone()
     }
 
     private fun cheapestNeighbours(
@@ -46,7 +51,7 @@ data class Monster(
         costGrid: Array<Array<Int>>,
         mapState: MapState
     ) : List<Position> {
-        var cheapest = Int.MAX_VALUE
+        var cheapest = IMPASSABLE
         val cheapestPositions = mutableListOf<Position>()
         (x - 1..x + 1).forEach { fx ->
             (y - 1..y + 1).forEach { fy ->
@@ -56,7 +61,7 @@ data class Monster(
                         cheapestPositions.clear()
                         cheapest = neighbourCost
                         cheapestPositions.add(Position(fx, fy))
-                    } else if (neighbourCost == cheapest) {
+                    } else if (neighbourCost == cheapest && cheapest < IMPASSABLE) {
                         cheapestPositions.add(Position(fx, fy))
                     }
                 }
@@ -64,6 +69,4 @@ data class Monster(
         }
         return cheapestPositions
     }
-
-
 }

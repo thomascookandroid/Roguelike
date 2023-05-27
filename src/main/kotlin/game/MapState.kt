@@ -9,9 +9,9 @@ class MapState(
     val rows: Int
 ) {
     val playerEntityPresenceMatrix = EntityPresenceMatrix(
-        inverted = true,
         width = columns,
-        height = rows
+        height = rows,
+        inverted = true
     )
 
     val wallEntityPresenceMatrix = EntityPresenceMatrix(
@@ -22,6 +22,10 @@ class MapState(
     val monsterEntityPresenceMatrix = EntityPresenceMatrix(
         width = columns,
         height = rows
+    )
+
+    val obstacleEntityPresenceMatrix = wallEntityPresenceMatrix.merge(
+        monsterEntityPresenceMatrix
     )
 
     private val grass = (0 until columns).flatMap { x ->
@@ -121,21 +125,39 @@ class MapState(
         )
     )
 
-    val monster = Monster(
-        position = MutableStateFlow(
-            Position(
-                x = 10,
-                y = 10
+    val monsters = listOf(
+        Monster(
+            position = MutableStateFlow(
+                Position(
+                    x = 10,
+                    y = 10
+                )
+            )
+        ),
+        Monster(
+            position = MutableStateFlow(
+                Position(
+                    x = 10,
+                    y = 11
+                )
+            )
+        ),
+        Monster(
+            position = MutableStateFlow(
+                Position(
+                    x = 10,
+                    y = 12
+                )
             )
         )
     )
 
     val renderables: List<Renderable>
-        get() = listOf(player).plus(monster).plus(walls).plus(grass)
+        get() = listOf(player).plus(monsters).plus(walls).plus(grass)
 
     init {
         playerEntityPresenceMatrix.track(player)
-        monsterEntityPresenceMatrix.track(monster)
+        monsterEntityPresenceMatrix.track(monsters)
         wallEntityPresenceMatrix.track(walls)
     }
 }

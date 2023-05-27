@@ -1,9 +1,5 @@
 package actions
 
-import entities.Entity
-
-abstract class Action(
-    protected val entity: Entity
-) {
+abstract class Action {
     abstract fun run()
 }
