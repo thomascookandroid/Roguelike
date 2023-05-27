@@ -62,7 +62,6 @@ class EntityPresenceMatrix(
                 Pair(acc.second, new)
             }
         ).onEach { (old, new) ->
-            // TODO: Figure out how to deal with concurrency of multiple trackables writing to same grid position
             old?.also { (x, y) ->
                 _costs[x][y] = if (inverted) {
                     1

@@ -48,13 +48,6 @@ class GameController {
         mapState.renderables.forEach { renderable ->
             render(graphics, renderable, tileWidth, tileHeight)
         }
-
-        visualiseEntityPresenceMatrix(
-            mapState.obstacleEntityPresenceMatrix,
-            graphics,
-            tileWidth,
-            tileHeight
-        )
     }
 
     private fun visualiseEntityPresenceMatrix(
