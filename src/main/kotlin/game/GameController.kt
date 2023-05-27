@@ -2,10 +2,41 @@ package game
 
 import algorithms.EntityPresenceMatrix
 import entities.*
-import kotlinx.coroutines.*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import tiles.TileSet
 import java.awt.Color
 import java.awt.Graphics
+import java.io.File
+import java.io.FileWriter
+import java.io.PrintWriter
+import java.lang.Exception
+
+class MapLoader {
+    fun loadMap() : MapState {
+        return Json.decodeFromString(
+            File("./src/main/resources/mapstate.json").readText(Charsets.UTF_8)
+        )
+    }
+}
+
+class MapSaver {
+    fun saveMap(mapState: MapState) {
+        try {
+            PrintWriter(
+                FileWriter(
+                    "./src/main/resources/mapstate.json"
+                )
+            ).use { printWriter ->
+                printWriter.write(
+                    Json.encodeToString(mapState)
+                )
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+    }
+}
 
 class GameController {
 
@@ -13,14 +44,15 @@ class GameController {
         tilesetPath = "../tileset.png"
     )
 
-    private val mapState = MapState(
-        columns = 20,
-        rows = 20
-    )
+    private val mapLoader = MapLoader()
+    private val mapSaver = MapSaver()
+
+    private lateinit var mapState: MapState
 
     fun start(
         render: () -> Unit
     ) {
+        mapState = mapLoader.loadMap()
         mapState.start {
             render()
         }
@@ -36,6 +68,7 @@ class GameController {
         mapState.renderables.forEach { renderable ->
             render(graphics, renderable, tileWidth, tileHeight)
         }
+        mapSaver.saveMap(mapState)
     }
 
     private fun visualiseEntityPresenceMatrix(

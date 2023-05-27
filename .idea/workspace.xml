@@ -5,9 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7341f360-70d5-43c1-ba35-21c4363a61ec" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/serialization/MutableStateFlowSerializers.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/algorithms/EntityPresenceMatrix.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/algorithms/EntityPresenceMatrix.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/Grass.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/Grass.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/Monster.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/Monster.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/Player.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/Player.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/Position.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/Position.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/TurnTakingEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/TurnTakingEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/Wall.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/Wall.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/game/GameController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/game/GameController.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/game/MapState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/game/MapState.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/game/TurnQueue.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/game/TurnQueue.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

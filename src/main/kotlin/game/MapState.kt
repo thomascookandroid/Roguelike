@@ -6,32 +6,39 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 
+@Serializable
 class MapState(
     val columns: Int,
     val rows: Int
 ) {
 
+    @kotlinx.serialization.Transient
     private val scope = CoroutineScope(Dispatchers.IO)
 
     private val turnQueue = TurnQueue()
 
+    @kotlinx.serialization.Transient
     val playerEntityPresenceMatrix = EntityPresenceMatrix(
         width = columns,
         height = rows,
         inverted = true
     )
 
+    @kotlinx.serialization.Transient
     val wallEntityPresenceMatrix = EntityPresenceMatrix(
         width = columns,
         height = rows,
     )
 
+    @kotlinx.serialization.Transient
     val monsterEntityPresenceMatrix = EntityPresenceMatrix(
         width = columns,
         height = rows
     )
 
+    @kotlinx.serialization.Transient
     val obstacleEntityPresenceMatrix = wallEntityPresenceMatrix.merge(
         monsterEntityPresenceMatrix
     )

@@ -7,9 +7,13 @@ import game.MapState
 import input.CommandCode
 import input.InputManager
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.serialization.Serializable
+import serialization.MutableStateFlowPositionSerializer
 import tiles.Tile
 
+@Serializable
 data class Player(
+    @Serializable(with = MutableStateFlowPositionSerializer::class)
     override val position: MutableStateFlow<Position>,
     override val tile: Tile = Tile.PLAYER,
     override val drawPriority: Int = 1,

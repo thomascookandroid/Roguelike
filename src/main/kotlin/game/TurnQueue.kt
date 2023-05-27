@@ -2,19 +2,25 @@ package game
 
 import entities.Entity
 import entities.TurnTakingEntity
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import java.util.*
 
+@Serializable
 class TurnQueue {
+    @Serializable
     private data class PrioritisedEntity(
         val entity: TurnTakingEntity,
         val heapKey: HeapKey
     )
 
+    @Serializable
     private data class HeapKey(
         var priority: Int,
         val unixTimestamp: Long
     )
 
+    @Transient
     private val queue = PriorityQueue<PrioritisedEntity> { a, b ->
         val comparison = a.heapKey.priority.compareTo(b.heapKey.priority)
         if (comparison == 0) {

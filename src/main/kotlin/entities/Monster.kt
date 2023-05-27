@@ -9,12 +9,16 @@ import algorithms.IMPASSABLE
 import game.MapState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.serialization.Serializable
+import serialization.MutableStateFlowPositionSerializer
 import tiles.Tile
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
 
+@Serializable
 data class Monster(
+    @Serializable(with = MutableStateFlowPositionSerializer::class)
     override val position: MutableStateFlow<Position>,
     override val tile: Tile = Tile.MONSTER,
     override val drawPriority: Int = 1,
