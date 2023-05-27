@@ -9,8 +9,6 @@ import java.awt.Graphics
 
 class GameController {
 
-    private val scope = CoroutineScope(Dispatchers.IO)
-
     private val tileSet = TileSet(
         tilesetPath = "../tileset.png"
     )
@@ -20,21 +18,11 @@ class GameController {
         rows = 20
     )
 
-    private val turnQueue = TurnQueue().apply {
-        add(mapState.player)
-        add(mapState.monsters)
-    }
-
     fun start(
         render: () -> Unit
     ) {
-        scope.launch {
-            while (turnQueue.isNotEmpty()) {
-                render()
-                val dequeued = turnQueue.poll()
-                dequeued.getAction(mapState).run()
-                turnQueue.add(dequeued)
-            }
+        mapState.start {
+            render()
         }
     }
 

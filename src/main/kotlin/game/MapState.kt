@@ -2,12 +2,20 @@ package game
 
 import algorithms.EntityPresenceMatrix
 import entities.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class MapState(
     val columns: Int,
     val rows: Int
 ) {
+
+    private val scope = CoroutineScope(Dispatchers.IO)
+
+    private val turnQueue = TurnQueue()
+
     val playerEntityPresenceMatrix = EntityPresenceMatrix(
         width = columns,
         height = rows,
@@ -155,9 +163,21 @@ class MapState(
     val renderables: List<Renderable>
         get() = listOf(player).plus(monsters).plus(walls).plus(grass)
 
-    init {
+    fun start(
+        render: () -> Unit
+    ) {
         playerEntityPresenceMatrix.track(player)
         monsterEntityPresenceMatrix.track(monsters)
         wallEntityPresenceMatrix.track(walls)
+        turnQueue.add(player)
+        turnQueue.add(monsters)
+        scope.launch {
+            while (turnQueue.isNotEmpty()) {
+                render()
+                val dequeued = turnQueue.poll()
+                dequeued.getAction(this@MapState).run()
+                turnQueue.add(dequeued)
+            }
+        }
     }
 }
