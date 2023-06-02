@@ -1,4 +1,4 @@
-package swing.panels
+package swing
 
 import game.GameController
 import java.awt.Color

@@ -5,23 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7341f360-70d5-43c1-ba35-21c4363a61ec" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/actions/ActionOpenMenu.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/serialization/LocalMapSaver.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/state/MenuState.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/actions/Action.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/actions/Action.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/actions/ActionAttack.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/actions/ActionAttack.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/actions/ActionMove.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/actions/ActionMove.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/actions/ActionNone.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/actions/ActionNone.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/actions/ActionOpenMenu.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/actions/ActionOpenMenu.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/Monster.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/Monster.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/Player.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/Player.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/entities/TurnTakingEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/entities/TurnTakingEntity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/game/GameController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/game/GameController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/game/MapState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/game/MapState.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/input/CommandCode.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/input/CommandCode.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/input/InputCode.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/input/InputCode.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/input/InputManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/input/InputManager.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/swing/frames/Game.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/swing/frames/Game.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/swing/panels/GamePanel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/swing/panels/GamePanel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mapstate.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/game/MapState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/state/LocalMapState.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/swing/frames/Game.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/swing/Game.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/swing/panels/GamePanel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/swing/GamePanel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,6 +135,12 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/kotlin/game/state" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="swing" />
+    </key>
     <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
       <recent name="actions" />
     </key>

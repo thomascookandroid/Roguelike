@@ -2,40 +2,32 @@ package game
 
 import algorithms.EntityPresenceMatrix
 import entities.*
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import serialization.LocalMapLoader
+import serialization.LocalMapSaver
+import state.LocalMapState
 import tiles.TileSet
 import java.awt.Color
 import java.awt.Graphics
-import java.io.File
-import java.io.FileWriter
-import java.io.PrintWriter
-import java.lang.Exception
 
-class MapLoader {
-    fun loadMap() : MapState {
-        return Json.decodeFromString(
-            File("./src/main/resources/mapstate.json").readText(Charsets.UTF_8)
-        )
-    }
-}
+sealed class State {
 
-class MapSaver {
-    fun saveMap(mapState: MapState) {
-        try {
-            PrintWriter(
-                FileWriter(
-                    "./src/main/resources/mapstate.json"
-                )
-            ).use { printWriter ->
-                printWriter.write(
-                    Json.encodeToString(mapState)
-                )
-            }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
+    abstract val columns: Int
+    abstract val rows: Int
+
+    protected fun start() {
+        onCreate()
+        while (true) {
+            onUpdate()
         }
     }
+
+    abstract fun onCreate()
+
+    abstract fun onUpdate()
+
+    abstract val renderables: List<Renderable>
+
+    abstract val subState: State?
 }
 
 class GameController {
@@ -44,14 +36,14 @@ class GameController {
         tilesetPath = "../tileset.png"
     )
 
-    private val mapLoader = MapLoader()
-    private val mapSaver = MapSaver()
+    private val localMapLoader = LocalMapLoader()
+    private val localMapSaver = LocalMapSaver()
 
-    private lateinit var mapState: MapState
+    private lateinit var localMapState: LocalMapState
 
     fun start() {
-        mapState = MapState(20, 20)
-        mapState.start()
+        localMapState = LocalMapState(20, 20)
+        localMapState.start()
     }
 
     fun render(
@@ -59,12 +51,12 @@ class GameController {
         renderWidth: Int,
         renderHeight: Int
     ) {
-        val tileWidth = renderWidth / mapState.columns
-        val tileHeight = renderHeight / mapState.rows
-        mapState.renderables.forEach { renderable ->
+        val tileWidth = renderWidth / localMapState.columns
+        val tileHeight = renderHeight / localMapState.rows
+        localMapState.renderables.forEach { renderable ->
             render(graphics, renderable, tileWidth, tileHeight)
         }
-        mapSaver.saveMap(mapState)
+        localMapSaver.save(localMapState)
     }
 
     private fun visualiseEntityPresenceMatrix(

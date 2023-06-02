@@ -1,13 +1,13 @@
 package entities
 
 import actions.Action
-import game.MapState
+import state.LocalMapState
 import kotlinx.serialization.Serializable
 
 @Serializable
 abstract class TurnTakingEntity : Entity() {
     abstract val speed: Int
     abstract fun getAction(
-        mapState: MapState
+        localMapState: LocalMapState
     ) : Action
 }

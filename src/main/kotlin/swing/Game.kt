@@ -1,6 +1,5 @@
-package swing.frames
+package swing
 
-import swing.panels.GamePanel
 import javax.swing.JFrame
 
 class Game : JFrame() {

@@ -4,7 +4,7 @@ import actions.Action
 import actions.ActionMove
 import actions.ActionOpenMenu
 import algorithms.EntityPresenceMatrix
-import game.MapState
+import state.LocalMapState
 import input.CommandCode
 import input.InputManager
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,36 +21,36 @@ data class Player(
     override val speed: Int = 100
 ): TurnTakingEntity(), Trackable {
     override tailrec fun getAction(
-        mapState: MapState
+        localMapState: LocalMapState
     ) : Action {
         return InputManager.consumeCurrentInput()?.let { commandCode ->
             when (commandCode) {
                 CommandCode.COMMAND_CODE_OPEN_MENU -> ActionOpenMenu(
-                    mapState.columns,
-                    mapState.rows
+                    localMapState.columns,
+                    localMapState.rows
                 )
                 CommandCode.COMMAND_LEFT -> moveActionIfValid(
-                    mapState.obstacleEntityPresenceMatrix,
+                    localMapState.obstacleEntityPresenceMatrix,
                     -1,
                     0
                 )
                 CommandCode.COMMAND_UP -> moveActionIfValid(
-                    mapState.obstacleEntityPresenceMatrix,
+                    localMapState.obstacleEntityPresenceMatrix,
                     0,
                     -1
                 )
                 CommandCode.COMMAND_RIGHT -> moveActionIfValid(
-                    mapState.obstacleEntityPresenceMatrix,
+                    localMapState.obstacleEntityPresenceMatrix,
                     1,
                     0
                 )
                 CommandCode.COMMAND_DOWN -> moveActionIfValid(
-                    mapState.obstacleEntityPresenceMatrix,
+                    localMapState.obstacleEntityPresenceMatrix,
                     0,
                     1
                 )
             }
-        } ?: getAction(mapState)
+        } ?: getAction(localMapState)
     }
 
     private fun moveActionIfValid(

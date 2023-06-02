@@ -1,6 +1,6 @@
 package actions
 
-import game.MenuState
+import state.MenuState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

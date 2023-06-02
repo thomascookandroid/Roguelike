@@ -1,17 +1,16 @@
-package game
+package state
 
 import algorithms.EntityPresenceMatrix
 import entities.*
-import input.CommandCode
-import input.InputManager
+import game.TurnQueue
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.Serializable
-import swing.frames.Game.Renderer.render
+import swing.Game.Renderer.render
 import java.util.concurrent.Executors
 
 @Serializable
-class MapState(
+class LocalMapState(
     val columns: Int,
     val rows: Int
 ) {
@@ -185,7 +184,7 @@ class MapState(
                 render()
                 val dequeued = turnQueue.poll()
                 dequeued.getAction(
-                    mapState = this@MapState
+                    localMapState = this@LocalMapState
                 ).run(
                     scope = scope
                 ).join()
@@ -193,30 +192,4 @@ class MapState(
             }
         }
     }
-}
-
-class MenuState(
-    private val rows: Int,
-    private val columns: Int
-) {
-
-    private val renderables = emptyList<Renderable>()
-
-    fun start() {
-        while (true) {
-            when (InputManager.consumeCurrentInput()) {
-                CommandCode.COMMAND_CODE_OPEN_MENU -> {
-                    break
-                }
-                else -> {
-                    // Perform menu action
-                    render()
-                }
-            }
-        }
-    }
-}
-
-class GameStateMachine {
-
 }
