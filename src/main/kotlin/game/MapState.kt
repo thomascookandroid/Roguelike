@@ -2,11 +2,13 @@ package game
 
 import algorithms.EntityPresenceMatrix
 import entities.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import input.CommandCode
+import input.InputManager
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import swing.frames.Game.Renderer.render
+import java.util.concurrent.Executors
 
 @Serializable
 class MapState(
@@ -15,7 +17,9 @@ class MapState(
 ) {
 
     @kotlinx.serialization.Transient
-    private val scope = CoroutineScope(Dispatchers.IO)
+    private val scope = CoroutineScope(
+        Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+    )
 
     private val turnQueue = TurnQueue()
 
@@ -170,9 +174,7 @@ class MapState(
     val renderables: List<Renderable>
         get() = listOf(player).plus(monsters).plus(walls).plus(grass)
 
-    fun start(
-        render: () -> Unit
-    ) {
+    fun start() {
         playerEntityPresenceMatrix.track(player)
         monsterEntityPresenceMatrix.track(monsters)
         wallEntityPresenceMatrix.track(walls)
@@ -182,9 +184,39 @@ class MapState(
             while (turnQueue.isNotEmpty()) {
                 render()
                 val dequeued = turnQueue.poll()
-                dequeued.getAction(this@MapState).run()
+                dequeued.getAction(
+                    mapState = this@MapState
+                ).run(
+                    scope = scope
+                ).join()
                 turnQueue.add(dequeued)
             }
         }
     }
+}
+
+class MenuState(
+    private val rows: Int,
+    private val columns: Int
+) {
+
+    private val renderables = emptyList<Renderable>()
+
+    fun start() {
+        while (true) {
+            when (InputManager.consumeCurrentInput()) {
+                CommandCode.COMMAND_CODE_OPEN_MENU -> {
+                    break
+                }
+                else -> {
+                    // Perform menu action
+                    render()
+                }
+            }
+        }
+    }
+}
+
+class GameStateMachine {
+
 }

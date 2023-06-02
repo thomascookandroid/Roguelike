@@ -49,13 +49,9 @@ class GameController {
 
     private lateinit var mapState: MapState
 
-    fun start(
-        render: () -> Unit
-    ) {
-        mapState = mapLoader.loadMap()
-        mapState.start {
-            render()
-        }
+    fun start() {
+        mapState = MapState(20, 20)
+        mapState.start()
     }
 
     fun render(

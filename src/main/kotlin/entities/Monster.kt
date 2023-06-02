@@ -24,11 +24,9 @@ data class Monster(
     override val drawPriority: Int = 1,
     override val speed: Int = 200
 ): TurnTakingEntity(), Trackable {
-    override suspend fun getAction(
+    override fun getAction(
         mapState: MapState
     ): Action {
-        delay(50)
-
         return if (isAdjacent(this, mapState.player)) {
             ActionAttack()
         } else {

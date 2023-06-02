@@ -26,6 +26,7 @@ object InputManager {
         KeyEvent.VK_UP -> InputCode.UP_ARROW
         KeyEvent.VK_RIGHT -> InputCode.RIGHT_ARROW
         KeyEvent.VK_DOWN -> InputCode.DOWN_ARROW
+        KeyEvent.VK_ESCAPE -> InputCode.ESCAPE
         else -> null
     }
 
@@ -39,7 +40,10 @@ object InputManager {
     }
 
     fun consumeCurrentInput() : CommandCode? {
-        val mappedCommand = if (inputSet.contains(InputCode.LEFT_ARROW)) {
+        val mappedCommand = if (inputSet.contains(InputCode.ESCAPE)) {
+            inputSet.clear()
+            CommandCode.COMMAND_CODE_OPEN_MENU
+        } else if (inputSet.contains(InputCode.LEFT_ARROW)) {
             inputSet.clear()
             CommandCode.COMMAND_LEFT
         } else if (inputSet.contains(InputCode.UP_ARROW)) {

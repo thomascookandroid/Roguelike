@@ -4,7 +4,13 @@ import swing.panels.GamePanel
 import javax.swing.JFrame
 
 class Game : JFrame() {
-    private val gamePanel = GamePanel()
+    companion object Renderer {
+        private val gamePanel = GamePanel()
+        fun render() {
+            gamePanel.repaint()
+        }
+    }
+
 
     init {
         add(gamePanel)

@@ -1,5 +1,3 @@
 package actions
 
-class ActionAttack : Action() {
-    override fun run() { }
-}
+class ActionAttack : Action()

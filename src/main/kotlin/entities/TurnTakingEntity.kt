@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 abstract class TurnTakingEntity : Entity() {
     abstract val speed: Int
-    abstract suspend fun getAction(
+    abstract fun getAction(
         mapState: MapState
     ) : Action
 }

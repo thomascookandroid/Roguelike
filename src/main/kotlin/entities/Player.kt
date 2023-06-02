@@ -2,6 +2,7 @@ package entities
 
 import actions.Action
 import actions.ActionMove
+import actions.ActionOpenMenu
 import algorithms.EntityPresenceMatrix
 import game.MapState
 import input.CommandCode
@@ -19,11 +20,15 @@ data class Player(
     override val drawPriority: Int = 1,
     override val speed: Int = 100
 ): TurnTakingEntity(), Trackable {
-    override tailrec suspend fun getAction(
+    override tailrec fun getAction(
         mapState: MapState
     ) : Action {
         return InputManager.consumeCurrentInput()?.let { commandCode ->
             when (commandCode) {
+                CommandCode.COMMAND_CODE_OPEN_MENU -> ActionOpenMenu(
+                    mapState.columns,
+                    mapState.rows
+                )
                 CommandCode.COMMAND_LEFT -> moveActionIfValid(
                     mapState.obstacleEntityPresenceMatrix,
                     -1,

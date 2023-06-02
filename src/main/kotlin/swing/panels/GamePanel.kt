@@ -19,8 +19,6 @@ class GamePanel : JPanel() {
         preferredSize = Dimension(640, 480)
         background = Color.BLACK
         isFocusable = true
-        gameController.start {
-            repaint()
-        }
+        gameController.start()
     }
 }
