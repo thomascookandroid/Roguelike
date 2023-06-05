@@ -44,7 +44,8 @@ class TileSet(
         Tile.GRASS to TilePosition(5, 0),
         Tile.WALL to TilePosition(23, 3),
         Tile.PLAYER to TilePosition(26, 0),
-        Tile.MONSTER to TilePosition(29, 6)
+        Tile.MONSTER to TilePosition(29, 6),
+        Tile.HEALTH_BAR to TilePosition(20, 15)
     )
 
     fun getTileDimensions(tile: Tile) = tilePositionMap[tile]?.let { (column, row) ->

@@ -1,6 +1,6 @@
 package serialization
 
-import entities.Position
+import data.Position
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.SerialDescriptor

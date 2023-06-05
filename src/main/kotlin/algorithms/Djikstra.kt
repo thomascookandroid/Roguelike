@@ -1,6 +1,6 @@
 package algorithms
 
-import entities.Position
+import data.Position
 import java.util.LinkedList
 
 const val IMPASSABLE = Int.MAX_VALUE

@@ -3,17 +3,19 @@ package actions
 import state.MenuState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import state.LocalMapState
 
 class ActionOpenMenu(
-    private val menuColumns: Int,
-    private val menuRows: Int
+    private val mapState: LocalMapState
 ) : Action() {
     override fun run(
         scope: CoroutineScope
     ) = scope.launch {
-        MenuState(
-            menuColumns,
-            menuRows
-        ).start()
+        mapState.enterSubState(
+            MenuState(
+                mapState.columns,
+                mapState.rows
+            )
+        )
     }
 }

@@ -4,6 +4,8 @@ import actions.Action
 import actions.ActionMove
 import actions.ActionOpenMenu
 import algorithms.EntityPresenceMatrix
+import components.Queueable
+import data.Position
 import state.LocalMapState
 import input.CommandCode
 import input.InputManager
@@ -19,15 +21,14 @@ data class Player(
     override val tile: Tile = Tile.PLAYER,
     override val drawPriority: Int = 1,
     override val speed: Int = 100
-): TurnTakingEntity(), Trackable {
+): Entity, Queueable {
     override tailrec fun getAction(
         localMapState: LocalMapState
     ) : Action {
         return InputManager.consumeCurrentInput()?.let { commandCode ->
             when (commandCode) {
                 CommandCode.COMMAND_CODE_OPEN_MENU -> ActionOpenMenu(
-                    localMapState.columns,
-                    localMapState.rows
+                    localMapState
                 )
                 CommandCode.COMMAND_LEFT -> moveActionIfValid(
                     localMapState.obstacleEntityPresenceMatrix,

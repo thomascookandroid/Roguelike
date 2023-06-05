@@ -1,7 +1,6 @@
 package game
 
-import entities.Entity
-import entities.TurnTakingEntity
+import components.Queueable
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import java.util.*
@@ -9,8 +8,8 @@ import java.util.*
 @Serializable
 class TurnQueue {
     @Serializable
-    private data class PrioritisedEntity(
-        val entity: TurnTakingEntity,
+    private data class PrioritisedQueueable(
+        val queueable: Queueable,
         val heapKey: HeapKey
     )
 
@@ -21,7 +20,7 @@ class TurnQueue {
     )
 
     @Transient
-    private val queue = PriorityQueue<PrioritisedEntity> { a, b ->
+    private val queue = PriorityQueue<PrioritisedQueueable> { a, b ->
         val comparison = a.heapKey.priority.compareTo(b.heapKey.priority)
         if (comparison == 0) {
             a.heapKey.unixTimestamp.compareTo(b.heapKey.unixTimestamp)
@@ -30,44 +29,44 @@ class TurnQueue {
         }
     }
 
-    fun add(entity: TurnTakingEntity) {
+    fun add(queueable: Queueable) {
         queue.add(
-            PrioritisedEntity(
+            PrioritisedQueueable(
                 heapKey = HeapKey(
-                    priority = entity.speed,
+                    priority = queueable.speed,
                     unixTimestamp = Date().time
                 ),
-                entity = entity
+                queueable = queueable
             )
         )
     }
 
-    fun add(entities: List<TurnTakingEntity>) {
+    fun add(queueables: List<Queueable>) {
         queue.addAll(
-            entities.map { entity ->
-                PrioritisedEntity(
+            queueables.map { queueable ->
+                PrioritisedQueueable(
                     heapKey = HeapKey(
-                        priority = entity.speed,
+                        priority = queueable.speed,
                         unixTimestamp = Date().time
                     ),
-                    entity = entity
+                    queueable = queueable
                 )
             }
         )
     }
 
-    fun remove(entity: Entity) {
+    fun remove(queueable: Queueable) {
         queue.removeIf { inQueue ->
-            inQueue.entity == entity
+            inQueue.queueable == queueable
         }
     }
 
-    fun poll() : TurnTakingEntity {
+    fun poll() : Queueable {
         val polled = queue.poll()
-        queue.forEach { prioritisedEntity ->
-            prioritisedEntity.heapKey.priority -= polled.heapKey.priority
+        queue.forEach { prioritisedQueueable ->
+            prioritisedQueueable.heapKey.priority -= polled.heapKey.priority
         }
-        return polled.entity
+        return polled.queueable
     }
 
     fun isNotEmpty() = queue.isNotEmpty()

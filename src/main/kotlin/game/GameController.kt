@@ -1,34 +1,13 @@
 package game
 
 import algorithms.EntityPresenceMatrix
-import entities.*
 import serialization.LocalMapLoader
 import serialization.LocalMapSaver
 import state.LocalMapState
 import tiles.TileSet
 import java.awt.Color
 import java.awt.Graphics
-
-sealed class State {
-
-    abstract val columns: Int
-    abstract val rows: Int
-
-    protected fun start() {
-        onCreate()
-        while (true) {
-            onUpdate()
-        }
-    }
-
-    abstract fun onCreate()
-
-    abstract fun onUpdate()
-
-    abstract val renderables: List<Renderable>
-
-    abstract val subState: State?
-}
+import java.lang.Exception
 
 class GameController {
 
@@ -42,7 +21,11 @@ class GameController {
     private lateinit var localMapState: LocalMapState
 
     fun start() {
-        localMapState = LocalMapState(20, 20)
+        localMapState = try {
+            localMapLoader.load()
+        } catch (ex: Exception) {
+            LocalMapState(20, 20)
+        }
         localMapState.start()
     }
 
@@ -53,9 +36,12 @@ class GameController {
     ) {
         val tileWidth = renderWidth / localMapState.columns
         val tileHeight = renderHeight / localMapState.rows
-        localMapState.renderables.forEach { renderable ->
-            render(graphics, renderable, tileWidth, tileHeight)
-        }
+        localMapState.render(
+            graphics,
+            tileSet,
+            tileWidth,
+            tileHeight
+        )
         localMapSaver.save(localMapState)
     }
 
@@ -75,32 +61,5 @@ class GameController {
                 )
             }
         }
-    }
-
-    private fun render(
-        graphics: Graphics,
-        renderable: Renderable,
-        tileWidth: Int,
-        tileHeight: Int
-    ) {
-        val tileDimensions = tileSet.getTileDimensions(renderable.tile)
-        graphics.drawRect(
-            renderable.position.value.x  * tileWidth,
-            renderable.position.value.y * tileHeight,
-            tileWidth,
-            tileHeight
-        )
-        graphics.drawImage(
-            tileSet.image,
-            renderable.position.value.x * tileWidth,
-            renderable.position.value.y * tileHeight,
-            renderable.position.value.x * tileWidth + tileWidth,
-            renderable.position.value.y * tileHeight + tileHeight,
-            tileDimensions.left,
-            tileDimensions.top,
-            tileDimensions.right,
-            tileDimensions.bottom,
-            null
-        )
     }
 }

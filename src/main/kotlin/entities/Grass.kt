@@ -1,5 +1,6 @@
 package entities
 
+import data.Position
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.Serializable
 import serialization.MutableStateFlowPositionSerializer
@@ -11,4 +12,4 @@ data class Grass(
     override val position: MutableStateFlow<Position>,
     override val tile: Tile = Tile.GRASS,
     override val drawPriority: Int = 0
-): Entity()
+): Entity

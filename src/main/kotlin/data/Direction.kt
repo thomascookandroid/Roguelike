@@ -1,4 +1,4 @@
-package entities
+package data
 
 enum class Direction {
     LEFT,

@@ -7,9 +7,9 @@ import serialization.MutableStateFlowPositionSerializer
 import tiles.Tile
 
 @Serializable
-data class Wall(
+data class HealthBar(
     @Serializable(with = MutableStateFlowPositionSerializer::class)
     override val position: MutableStateFlow<Position>,
-    override val tile: Tile = Tile.WALL,
+    override val tile: Tile = Tile.HEALTH_BAR,
     override val drawPriority: Int = 0
 ): Entity

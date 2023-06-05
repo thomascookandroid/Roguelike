@@ -6,6 +6,9 @@ import actions.ActionMove
 import actions.ActionNone
 import algorithms.Djikstra
 import algorithms.IMPASSABLE
+import components.Positionable
+import components.Queueable
+import data.Position
 import state.LocalMapState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.Serializable
@@ -22,7 +25,7 @@ data class Monster(
     override val tile: Tile = Tile.MONSTER,
     override val drawPriority: Int = 1,
     override val speed: Int = 200
-): TurnTakingEntity(), Trackable {
+): Entity, Queueable {
     override fun getAction(
         localMapState: LocalMapState
     ): Action {
@@ -34,8 +37,8 @@ data class Monster(
     }
 
     private fun isAdjacent(
-        a: Entity,
-        b: Entity
+        a: Positionable,
+        b: Positionable
     ) : Boolean {
         val (ax, ay) = a.position.value
         val (bx, by) = b.position.value

@@ -1,3 +1,6 @@
 package entities
 
-sealed class Entity : Renderable
+import components.Positionable
+import components.Renderable
+
+interface Entity : Renderable, Positionable

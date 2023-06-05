@@ -1,7 +1,7 @@
 package algorithms
 
-import entities.Position
-import entities.Trackable
+import components.Positionable
+import data.Position
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -10,7 +10,7 @@ class EntityPresenceMatrix(
     private val width: Int,
     private val height: Int,
     private val inverted: Boolean = false,
-    otherTrackables: Flow<List<Trackable>> = flowOf(emptyList())
+    otherTrackables: Flow<List<Positionable>> = flowOf(emptyList())
 ) {
 
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -31,12 +31,12 @@ class EntityPresenceMatrix(
         }.toTypedArray()
 
     fun track(
-        trackables: List<Trackable>
+        trackables: List<Positionable>
     ) {
         latestTrackables.value = latestTrackables.value.plus(trackables)
     }
 
-    private val latestTrackables = MutableStateFlow<List<Trackable>>(listOf())
+    private val latestTrackables = MutableStateFlow<List<Positionable>>(listOf())
     private val combinedTrackables = latestTrackables.combine(otherTrackables) { a, b ->
         a.plus(b)
     }
@@ -54,15 +54,14 @@ class EntityPresenceMatrix(
     }
 
     fun track(
-        trackable: Trackable
+        positionable: Positionable
     ) {
-        trackable.position.runningFold<Position, Pair<Position?, Position>>(
-            initial = Pair(null, trackable.position.value),
+        positionable.position.runningFold<Position, Pair<Position?, Position>>(
+            initial = Pair(null, positionable.position.value),
             operation = { acc, new ->
                 Pair(acc.second, new)
             }
         ).onEach { (old, new) ->
-            // TODO: Figure out how to deal with concurrency of multiple trackables writing to same grid position
             old?.also { (x, y) ->
                 _costs[x][y] = if (inverted) {
                     1

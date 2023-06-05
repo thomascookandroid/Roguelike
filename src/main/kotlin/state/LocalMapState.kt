@@ -1,24 +1,18 @@
 package state
 
 import algorithms.EntityPresenceMatrix
+import data.Position
 import entities.*
 import game.TurnQueue
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.Serializable
 import swing.Game.Renderer.render
-import java.util.concurrent.Executors
 
 @Serializable
 class LocalMapState(
-    val columns: Int,
-    val rows: Int
-) {
-
-    @kotlinx.serialization.Transient
-    private val scope = CoroutineScope(
-        Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-    )
+    override val columns: Int,
+    override val rows: Int
+) : State() {
 
     private val turnQueue = TurnQueue()
 
@@ -143,7 +137,7 @@ class LocalMapState(
         )
     )
 
-    val monsters = listOf(
+    private val monsters = listOf(
         Monster(
             position = MutableStateFlow(
                 Position(
@@ -170,26 +164,30 @@ class LocalMapState(
         )
     )
 
-    val renderables: List<Renderable>
+    override val entities: List<Entity>
         get() = listOf(player).plus(monsters).plus(walls).plus(grass)
 
-    fun start() {
+    @kotlinx.serialization.Transient
+    override val stateActivePredicate = {
+        turnQueue.isNotEmpty()
+    }
+
+    override fun onCreate() {
         playerEntityPresenceMatrix.track(player)
         monsterEntityPresenceMatrix.track(monsters)
         wallEntityPresenceMatrix.track(walls)
         turnQueue.add(player)
         turnQueue.add(monsters)
-        scope.launch {
-            while (turnQueue.isNotEmpty()) {
-                render()
-                val dequeued = turnQueue.poll()
-                dequeued.getAction(
-                    localMapState = this@LocalMapState
-                ).run(
-                    scope = scope
-                ).join()
-                turnQueue.add(dequeued)
-            }
-        }
+    }
+
+    override suspend fun onUpdate() {
+        render()
+        val dequeued = turnQueue.poll()
+        dequeued.getAction(
+            localMapState = this@LocalMapState
+        ).run(
+            scope = scope
+        ).join()
+        turnQueue.add(dequeued)
     }
 }

@@ -5,5 +5,6 @@ enum class Tile {
     GRASS,
     WALL,
     PLAYER,
-    MONSTER
+    MONSTER,
+    HEALTH_BAR
 }
