@@ -1,8 +1,13 @@
 package game
 
+import actions.Action
 import components.Queueable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import state.LocalMapState
+import state.State
 import java.util.*
 
 @Serializable
@@ -29,7 +34,9 @@ class TurnQueue {
         }
     }
 
-    fun add(queueable: Queueable) {
+    fun add(
+        queueable: Queueable
+    ) {
         queue.add(
             PrioritisedQueueable(
                 heapKey = HeapKey(
@@ -41,7 +48,9 @@ class TurnQueue {
         )
     }
 
-    fun add(queueables: List<Queueable>) {
+    fun add(
+        queueables: List<Queueable>
+    ) {
         queue.addAll(
             queueables.map { queueable ->
                 PrioritisedQueueable(
@@ -55,18 +64,42 @@ class TurnQueue {
         )
     }
 
-    fun remove(queueable: Queueable) {
+    fun remove(
+        queueable: Queueable
+    ) {
         queue.removeIf { inQueue ->
             inQueue.queueable == queueable
         }
     }
 
-    fun poll() : Queueable {
+    suspend fun takeTurn(
+        scope: CoroutineScope,
+        localMapState: LocalMapState
+    ) {
+        val action = queue.peek().queueable.getAction(
+            localMapState = localMapState
+        ).apply {
+            run(
+                scope = scope
+            ).join()
+        }
+        when (action) {
+            is Action.Terminal -> {
+                advance()
+            }
+            else -> takeTurn(
+                scope = scope,
+                localMapState = localMapState
+            )
+        }
+    }
+
+    private fun advance() {
         val polled = queue.poll()
         queue.forEach { prioritisedQueueable ->
             prioritisedQueueable.heapKey.priority -= polled.heapKey.priority
         }
-        return polled.queueable
+        add(polled.queueable)
     }
 
     fun isNotEmpty() = queue.isNotEmpty()

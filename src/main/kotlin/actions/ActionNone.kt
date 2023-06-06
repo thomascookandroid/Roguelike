@@ -1,3 +1,3 @@
 package actions
 
-class ActionNone : Action()
+class ActionNone : Action.Terminal()

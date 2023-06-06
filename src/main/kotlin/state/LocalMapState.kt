@@ -182,12 +182,6 @@ class LocalMapState(
 
     override suspend fun onUpdate() {
         render()
-        val dequeued = turnQueue.poll()
-        dequeued.getAction(
-            localMapState = this@LocalMapState
-        ).run(
-            scope = scope
-        ).join()
-        turnQueue.add(dequeued)
+        turnQueue.takeTurn(scope, this)
     }
 }

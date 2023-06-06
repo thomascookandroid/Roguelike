@@ -8,7 +8,7 @@ class ActionMove(
     private val dx: Int,
     private val dy: Int,
     private val positionable: Positionable
-) : Action() {
+) : Action.Terminal() {
     override fun run(
         scope: CoroutineScope
     ) = scope.launch {

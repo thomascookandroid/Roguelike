@@ -27,9 +27,11 @@ data class Player(
     ) : Action {
         return InputManager.consumeCurrentInput()?.let { commandCode ->
             when (commandCode) {
-                CommandCode.COMMAND_CODE_OPEN_MENU -> ActionOpenMenu(
-                    localMapState
-                )
+                CommandCode.COMMAND_CODE_OPEN_MENU -> {
+                    ActionOpenMenu(
+                        localMapState
+                    )
+                }
                 CommandCode.COMMAND_LEFT -> moveActionIfValid(
                     localMapState.obstacleEntityPresenceMatrix,
                     -1,

@@ -1,3 +1,3 @@
 package actions
 
-class ActionAttack : Action()
+class ActionAttack : Action.Terminal()

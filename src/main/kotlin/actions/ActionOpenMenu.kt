@@ -7,7 +7,7 @@ import state.LocalMapState
 
 class ActionOpenMenu(
     private val mapState: LocalMapState
-) : Action() {
+) : Action.Intermediate() {
     override fun run(
         scope: CoroutineScope
     ) = scope.launch {
