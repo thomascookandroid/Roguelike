@@ -12,7 +12,7 @@ class LocalMapSaver {
         try {
             PrintWriter(
                 FileWriter(
-                    "./src/main/resources/mapstate.json"
+                    "./src/main/resources/mapstate_saved.json"
                 )
             ).use { printWriter ->
                 printWriter.write(

@@ -21,11 +21,7 @@ class GameController {
     private lateinit var localMapState: LocalMapState
 
     fun start() {
-        localMapState = try {
-            localMapLoader.load()
-        } catch (ex: Exception) {
-            LocalMapState(20, 20)
-        }
+        localMapState = localMapLoader.load()
         localMapState.start()
     }
 

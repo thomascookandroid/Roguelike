@@ -1,17 +1,16 @@
 package state
 
 import algorithms.EntityPresenceMatrix
-import data.Position
 import entities.*
 import game.TurnQueue
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.Serializable
 import swing.Game.Renderer.render
 
 @Serializable
 class LocalMapState(
     override val columns: Int,
-    override val rows: Int
+    override val rows: Int,
+    override val entities: List<Entity>
 ) : State() {
 
     private val turnQueue = TurnQueue()
@@ -40,132 +39,14 @@ class LocalMapState(
         monsterEntityPresenceMatrix
     )
 
-    private val grass = (0 until columns).flatMap { x ->
-        (0 until rows).map { y ->
-            Grass(
-                position = MutableStateFlow(
-                    Position(
-                        x = x,
-                        y = y
-                    )
-                )
-            )
-        }
-    }
+    val player: Player
+        get() = entities.filterIsInstance<Player>().first()
 
-    private val walls = listOf(
-        Wall(
-            position = MutableStateFlow(
-                Position(
-                    x = 9,
-                    y = 9
-                )
-            )
-        ),
-        Wall(
-            position = MutableStateFlow(
-                Position(
-                    x = 9,
-                    y = 10
-                )
-            )
-        ),
-        Wall(
-            position = MutableStateFlow(
-                Position(
-                    x = 9,
-                    y = 11
-                )
-            )
-        ),
-        Wall(
-            position = MutableStateFlow(
-                Position(
-                    x = 9,
-                    y = 12
-                )
-            )
-        ),
-        Wall(
-            position = MutableStateFlow(
-                Position(
-                    x = 10,
-                    y = 9
-                )
-            )
-        ),
-        Wall(
-            position = MutableStateFlow(
-                Position(
-                    x = 11,
-                    y = 9
-                )
-            )
-        ),
-        Wall(
-            position = MutableStateFlow(
-                Position(
-                    x = 11,
-                    y = 10
-                )
-            )
-        ),
-        Wall(
-            position = MutableStateFlow(
-                Position(
-                    x = 11,
-                    y = 11
-                )
-            )
-        ),
-        Wall(
-            position = MutableStateFlow(
-                Position(
-                    x = 11,
-                    y = 12
-                )
-            )
-        )
-    )
+    private val monsters: List<Monster>
+        get() = entities.filterIsInstance<Monster>()
 
-    val player = Player(
-        position = MutableStateFlow(
-            Position(
-                x = 10,
-                y = 3
-            )
-        )
-    )
-
-    private val monsters = listOf(
-        Monster(
-            position = MutableStateFlow(
-                Position(
-                    x = 10,
-                    y = 10
-                )
-            )
-        ),
-        Monster(
-            position = MutableStateFlow(
-                Position(
-                    x = 10,
-                    y = 11
-                )
-            )
-        ),
-        Monster(
-            position = MutableStateFlow(
-                Position(
-                    x = 10,
-                    y = 12
-                )
-            )
-        )
-    )
-
-    override val entities: List<Entity>
-        get() = listOf(player).plus(monsters).plus(walls).plus(grass)
+    private val walls: List<Wall>
+        get() = entities.filterIsInstance<Wall>()
 
     @kotlinx.serialization.Transient
     override val stateActivePredicate = {
@@ -182,6 +63,9 @@ class LocalMapState(
 
     override suspend fun onUpdate() {
         render()
-        turnQueue.takeTurn(scope, this)
+        turnQueue.takeTurn(
+            scope = scope,
+            localMapState = this
+        )
     }
 }

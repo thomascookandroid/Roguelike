@@ -2,5 +2,7 @@ package entities
 
 import components.Positionable
 import components.Renderable
+import kotlinx.serialization.Serializable
 
-interface Entity : Renderable, Positionable
+@Serializable
+sealed interface Entity : Renderable, Positionable

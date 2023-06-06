@@ -3,11 +3,9 @@ package game
 import actions.Action
 import components.Queueable
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import state.LocalMapState
-import state.State
 import java.util.*
 
 @Serializable
@@ -72,7 +70,7 @@ class TurnQueue {
         }
     }
 
-    suspend fun takeTurn(
+    tailrec suspend fun takeTurn(
         scope: CoroutineScope,
         localMapState: LocalMapState
     ) {
@@ -84,9 +82,7 @@ class TurnQueue {
             ).join()
         }
         when (action) {
-            is Action.Terminal -> {
-                advance()
-            }
+            is Action.Terminal -> finishTurn()
             else -> takeTurn(
                 scope = scope,
                 localMapState = localMapState
@@ -94,7 +90,7 @@ class TurnQueue {
         }
     }
 
-    private fun advance() {
+    private fun finishTurn() {
         val polled = queue.poll()
         queue.forEach { prioritisedQueueable ->
             prioritisedQueueable.heapKey.priority -= polled.heapKey.priority
