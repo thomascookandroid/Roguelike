@@ -1,8 +1,8 @@
 package entities
 
-import actions.Action
-import actions.ActionMove
-import actions.ActionOpenMenu
+import state.actions.Action
+import state.actions.ActionMove
+import state.actions.ActionOpenMenu
 import algorithms.EntityPresenceMatrix
 import components.Queueable
 import data.Position

@@ -1,3 +1,3 @@
-package actions
+package state.actions
 
 class ActionAttack : Action.Terminal()

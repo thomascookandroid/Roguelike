@@ -1,35 +1,24 @@
 package state
 
 import entities.Entity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.asCoroutineDispatcher
-import kotlinx.coroutines.launch
 import tiles.TileSet
 import java.awt.Graphics
-import java.util.concurrent.Executors
+import swing.Game.Renderer.render
 
 sealed class State {
 
     abstract val columns: Int
     abstract val rows: Int
 
-    companion object {
-        @JvmStatic
-        protected val scope = CoroutineScope(
-            Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-        )
-    }
-
-    fun start(
-        onStateDeactivate: (() -> Unit)? = null
+    suspend fun start(
+        onStateDeactivate: (suspend () -> Unit)? = null
     ) {
         onCreate()
-        scope.launch {
-            while (stateActivePredicate()) {
-                onUpdate()
-            }
-            onStateDeactivate?.invoke()
+        while (stateActivePredicate()) {
+            render()
+            onUpdate()
         }
+        onStateDeactivate?.invoke()
     }
 
     fun render(
@@ -45,6 +34,14 @@ sealed class State {
             tileWidth,
             tileHeight
         )
+    }
+
+    open fun renderDebug(
+        graphics: Graphics,
+        tileWidth: Int,
+        tileHeight: Int
+    ) {
+        // Do nothing
     }
 
     private fun render(
@@ -76,13 +73,13 @@ sealed class State {
 
     abstract val stateActivePredicate: () -> Boolean
 
-    abstract fun onCreate()
+    abstract suspend fun onCreate()
 
     abstract suspend fun onUpdate()
 
     abstract val entities: List<Entity>
 
-    fun enterSubState(
+    suspend fun enterSubState(
         state: State
     ) {
         subState = state
@@ -91,6 +88,5 @@ sealed class State {
         }
     }
 
-    var subState: State? = null
-        private set
+    private var subState: State? = null
 }

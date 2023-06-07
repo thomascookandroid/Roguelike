@@ -3,8 +3,9 @@ package algorithms
 import components.Positionable
 import data.Position
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.*
+import java.util.concurrent.Executors
 
 class EntityPresenceMatrix(
     private val width: Int,
@@ -13,7 +14,11 @@ class EntityPresenceMatrix(
     otherTrackables: Flow<List<Positionable>> = flowOf(emptyList())
 ) {
 
-    private val scope = CoroutineScope(Dispatchers.IO)
+    companion object {
+        private val scope = CoroutineScope(
+            Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+        )
+    }
 
     private val _costs = Array(width) {
         Array(height) {

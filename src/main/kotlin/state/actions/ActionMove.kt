@@ -1,7 +1,8 @@
-package actions
+package state.actions
 
 import components.Positionable
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ActionMove(
@@ -9,9 +10,7 @@ class ActionMove(
     private val dy: Int,
     private val positionable: Positionable
 ) : Action.Terminal() {
-    override fun run(
-        scope: CoroutineScope
-    ) = scope.launch {
+    override suspend fun run() {
         positionable.position.value = positionable.position.value.let { position ->
             position.copy(
                 x = position.x + dx,

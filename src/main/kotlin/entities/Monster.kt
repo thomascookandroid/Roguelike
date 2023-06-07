@@ -1,9 +1,9 @@
 package entities
 
-import actions.Action
-import actions.ActionAttack
-import actions.ActionMove
-import actions.ActionNone
+import state.actions.Action
+import state.actions.ActionAttack
+import state.actions.ActionMove
+import state.actions.ActionNone
 import algorithms.Djikstra
 import algorithms.IMPASSABLE
 import components.Positionable
@@ -63,14 +63,14 @@ data class Monster(
             moveToPlayerCostGrid, localMapState
         )
 
-        return downhillNeighbours.sortedBy { (x, y) ->
+        return downhillNeighbours.minByOrNull { (x, y) ->
             cartesianDistance(
                 localMapState.player.position.value.x,
                 localMapState.player.position.value.y,
                 x,
                 y
             )
-        }.firstOrNull()?.let { moveTo ->
+        }?.let { moveTo ->
             return ActionMove(
                 moveTo.x - position.value.x,
                 moveTo.y - position.value.y,

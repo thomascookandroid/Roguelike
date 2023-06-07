@@ -1,6 +1,6 @@
 package components
 
-import actions.Action
+import state.actions.Action
 import state.LocalMapState
 
 interface Queueable {

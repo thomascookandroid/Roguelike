@@ -13,30 +13,44 @@ class MenuState(
     override val columns: Int
 ) : State() {
 
-    private var currentCommandCode: CommandCode? = null
-
     override val stateActivePredicate = {
-        currentCommandCode = InputManager.consumeCurrentInput()
-        when (currentCommandCode) {
-            CommandCode.COMMAND_CODE_OPEN_MENU -> false
-            else -> true
-        }
+        _isActive
     }
 
-    override fun onCreate() {
+    private var _isActive = true
 
+    override suspend fun onCreate() {
+
+    }
+
+    private tailrec fun getAction() : () -> Unit {
+        return InputManager.consumeCurrentInput()?.let { commandCode ->
+            when (commandCode) {
+                CommandCode.COMMAND_CODE_OPEN_MENU -> {
+                    {
+                        _isActive = false
+                    }
+                }
+                CommandCode.COMMAND_LEFT -> {
+                    { }
+                }
+                CommandCode.COMMAND_UP -> {
+                    { }
+                }
+                CommandCode.COMMAND_RIGHT -> {
+                    { }
+                }
+                CommandCode.COMMAND_DOWN -> {
+                    { }
+                }
+            }
+        } ?: getAction()
     }
 
     override suspend fun onUpdate() {
-        if (currentCommandCode == CommandCode.COMMAND_DOWN) {
-
-        } else if (currentCommandCode == CommandCode.COMMAND_UP) {
-
-        } else if (currentCommandCode == CommandCode.COMMAND_LEFT) {
-
-        } else if (currentCommandCode == CommandCode.COMMAND_RIGHT) {
-
-        }
+        render()
+        val action = getAction()
+        action.invoke()
         render()
     }
 

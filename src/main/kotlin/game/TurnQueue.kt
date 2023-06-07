@@ -1,8 +1,7 @@
 package game
 
-import actions.Action
+import state.actions.Action
 import components.Queueable
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import state.LocalMapState
@@ -71,20 +70,15 @@ class TurnQueue {
     }
 
     tailrec suspend fun takeTurn(
-        scope: CoroutineScope,
         localMapState: LocalMapState
     ) {
         val action = queue.peek().queueable.getAction(
             localMapState = localMapState
-        ).apply {
-            run(
-                scope = scope
-            ).join()
-        }
+        )
+        action.run()
         when (action) {
             is Action.Terminal -> finishTurn()
             else -> takeTurn(
-                scope = scope,
                 localMapState = localMapState
             )
         }

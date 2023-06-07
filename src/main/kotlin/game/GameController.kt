@@ -1,13 +1,14 @@
 package game
 
-import algorithms.EntityPresenceMatrix
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.launch
 import serialization.LocalMapLoader
 import serialization.LocalMapSaver
 import state.LocalMapState
 import tiles.TileSet
-import java.awt.Color
 import java.awt.Graphics
-import java.lang.Exception
+import java.util.concurrent.Executors
 
 class GameController {
 
@@ -20,9 +21,15 @@ class GameController {
 
     private lateinit var localMapState: LocalMapState
 
+    private val scope = CoroutineScope(
+        Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+    )
+
     fun start() {
         localMapState = localMapLoader.load()
-        localMapState.start()
+        scope.launch {
+            localMapState.start()
+        }
     }
 
     fun render(
@@ -38,24 +45,11 @@ class GameController {
             tileWidth,
             tileHeight
         )
+        localMapState.renderDebug(
+            graphics,
+            tileWidth,
+            tileHeight
+        )
         localMapSaver.save(localMapState)
-    }
-
-    private fun visualiseEntityPresenceMatrix(
-        entityPresenceMatrix: EntityPresenceMatrix,
-        graphics: Graphics,
-        tileWidth: Int,
-        tileHeight: Int
-    ) {
-        graphics.color = Color.RED
-        entityPresenceMatrix.costs.forEachIndexed { x, rows ->
-            rows.forEachIndexed { y, cell ->
-                graphics.drawString(
-                    cell.toString(),
-                    x * tileWidth + tileWidth / 2,
-                    y * tileHeight + tileHeight / 2
-                )
-            }
-        }
     }
 }

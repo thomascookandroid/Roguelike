@@ -10,7 +10,6 @@ class Game : JFrame() {
         }
     }
 
-
     init {
         add(gamePanel)
         title = "Roguelike"
