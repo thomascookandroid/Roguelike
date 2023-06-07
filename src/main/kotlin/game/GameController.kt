@@ -1,5 +1,6 @@
 package game
 
+import GlobalVariables
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -45,11 +46,12 @@ class GameController {
             tileWidth,
             tileHeight
         )
-        localMapState.renderDebug(
-            graphics,
-            tileWidth,
-            tileHeight
-        )
+        if (GlobalVariables.shouldDebug)
+            localMapState.renderDebug(
+                graphics,
+                tileWidth,
+                tileHeight
+            )
         localMapSaver.save(localMapState)
     }
 }

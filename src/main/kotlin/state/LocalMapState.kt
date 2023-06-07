@@ -77,6 +77,15 @@ class LocalMapState(
     ) {
         val oldColor = graphics.color
         graphics.color = Color.BLUE
+        obstacleCostGrid.forEachIndexed { x, rows ->
+            rows.forEachIndexed { y, cell ->
+                graphics.drawString(
+                    cell.coerceAtMost(100).toString(),
+                    x * tileWidth + tileWidth / 2,
+                    y * tileHeight + tileHeight / 2
+                )
+            }
+        }
         graphics.color = oldColor
     }
 }
