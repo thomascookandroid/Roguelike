@@ -1,10 +1,8 @@
 package state
 
-import algorithms.EntityPresenceMatrix
 import entities.*
 import game.TurnQueue
 import kotlinx.serialization.Serializable
-import swing.Game.Renderer.render
 import java.awt.Color
 import java.awt.Graphics
 
@@ -17,30 +15,6 @@ class LocalMapState(
 
     private val turnQueue = TurnQueue()
 
-    @kotlinx.serialization.Transient
-    val playerEntityPresenceMatrix = EntityPresenceMatrix(
-        width = columns,
-        height = rows,
-        inverted = true
-    )
-
-    @kotlinx.serialization.Transient
-    val wallEntityPresenceMatrix = EntityPresenceMatrix(
-        width = columns,
-        height = rows,
-    )
-
-    @kotlinx.serialization.Transient
-    val monsterEntityPresenceMatrix = EntityPresenceMatrix(
-        width = columns,
-        height = rows
-    )
-
-    @kotlinx.serialization.Transient
-    val obstacleEntityPresenceMatrix = wallEntityPresenceMatrix.merge(
-        monsterEntityPresenceMatrix
-    )
-
     val player: Player
         get() = entities.filterIsInstance<Player>().first()
 
@@ -50,15 +24,42 @@ class LocalMapState(
     private val walls: List<Wall>
         get() = entities.filterIsInstance<Wall>()
 
+    val obstacleCostGrid: Array<Array<Int>>
+        get() {
+            val wallCostsMap = walls.associate { wall ->
+                (wall.x to wall.y) to 1
+            }
+            val monsterCostsMap = monsters.associate { monster ->
+                (monster.x to monster.y) to 1
+            }
+            return Array(columns) { x ->
+                Array(rows) { y ->
+                    wallCostsMap[x to y]
+                        ?: monsterCostsMap[x to y]
+                        ?: 0
+                }
+            }
+        }
+
+    val playerGoalGrid: Array<Array<Int>>
+        get() {
+            return Array(columns) { x ->
+                Array(rows) { y ->
+                    if (player.x == x && player.y == y) {
+                        0
+                    } else {
+                        1
+                    }
+                }
+            }
+        }
+
     @kotlinx.serialization.Transient
     override val stateActivePredicate = {
         turnQueue.isNotEmpty()
     }
 
     override suspend fun onCreate() {
-        playerEntityPresenceMatrix.track(player)
-        monsterEntityPresenceMatrix.track(monsters)
-        wallEntityPresenceMatrix.track(walls)
         turnQueue.add(player)
         turnQueue.add(monsters)
     }
@@ -76,15 +77,6 @@ class LocalMapState(
     ) {
         val oldColor = graphics.color
         graphics.color = Color.BLUE
-        playerEntityPresenceMatrix.costs.forEachIndexed { x, rows ->
-            rows.forEachIndexed { y, cell ->
-                graphics.drawString(
-                    cell.coerceAtMost(100).toString(),
-                    x * tileWidth + tileWidth / 2,
-                    y * tileHeight + tileHeight / 2
-                )
-            }
-        }
         graphics.color = oldColor
     }
 }

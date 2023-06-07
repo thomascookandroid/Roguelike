@@ -55,7 +55,8 @@ sealed class State {
             entities.forEach { entity ->
                 entity.render(
                     graphics,
-                    entity.position.value,
+                    entity.x,
+                    entity.y,
                     tileSet,
                     tileWidth,
                     tileHeight

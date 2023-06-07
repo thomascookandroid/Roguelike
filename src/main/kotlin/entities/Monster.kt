@@ -8,11 +8,8 @@ import algorithms.Djikstra
 import algorithms.IMPASSABLE
 import components.Positionable
 import components.Queueable
-import data.Position
 import state.LocalMapState
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.Serializable
-import serialization.MutableStateFlowPositionSerializer
 import tiles.Tile
 import kotlin.math.abs
 import kotlin.math.pow
@@ -20,12 +17,13 @@ import kotlin.math.sqrt
 
 @Serializable
 data class Monster(
-    @Serializable(with = MutableStateFlowPositionSerializer::class)
-    override val position: MutableStateFlow<Position>,
+    override var x: Int,
+    override var y: Int,
     override val tile: Tile = Tile.MONSTER,
     override val drawPriority: Int = 1,
     override val speed: Int = 200
 ): Entity, Queueable {
+
     override fun getAction(
         localMapState: LocalMapState
     ): Action {
@@ -40,10 +38,8 @@ data class Monster(
         a: Positionable,
         b: Positionable
     ) : Boolean {
-        val (ax, ay) = a.position.value
-        val (bx, by) = b.position.value
-        val dx = abs(ax - bx)
-        val dy = abs(ay - by)
+        val dx = abs(a.x - b.x)
+        val dy = abs(a.y - b.y)
         return dx < 2 && dy < 2
     }
 
@@ -53,27 +49,27 @@ data class Monster(
         val moveToPlayerCostGrid = Djikstra().floodFill(
             localMapState.columns,
             localMapState.rows,
-            localMapState.playerEntityPresenceMatrix,
-            localMapState.obstacleEntityPresenceMatrix
+            localMapState.playerGoalGrid,
+            localMapState.obstacleCostGrid
         )
 
         val downhillNeighbours = cheapestNeighbours(
-            position.value.x,
-            position.value.y,
+            x,
+            y,
             moveToPlayerCostGrid, localMapState
         )
 
         return downhillNeighbours.minByOrNull { (x, y) ->
             cartesianDistance(
-                localMapState.player.position.value.x,
-                localMapState.player.position.value.y,
+                localMapState.player.x,
+                localMapState.player.y,
                 x,
                 y
             )
-        }?.let { moveTo ->
-            return ActionMove(
-                moveTo.x - position.value.x,
-                moveTo.y - position.value.y,
+        }?.let { (moveToX, moveToY) ->
+            ActionMove(
+                moveToX - x,
+                moveToY - y,
                 this
             )
         }
@@ -93,9 +89,9 @@ data class Monster(
         y: Int,
         costGrid: Array<Array<Int>>,
         localMapState: LocalMapState
-    ) : List<Position> {
+    ) : List<Pair<Int, Int>> {
         var cheapest = IMPASSABLE
-        val cheapestPositions = mutableListOf<Position>()
+        val cheapestPositions = mutableListOf<Pair<Int, Int>>()
         (x - 1..x + 1).forEach { fx ->
             (y - 1..y + 1).forEach { fy ->
                 if (fx in (0 until localMapState.columns) && fy in (0 until localMapState.rows)) {
@@ -103,9 +99,9 @@ data class Monster(
                     if (neighbourCost < cheapest) {
                         cheapestPositions.clear()
                         cheapest = neighbourCost
-                        cheapestPositions.add(Position(fx, fy))
+                        cheapestPositions.add(fx to fy)
                     } else if (neighbourCost == cheapest && cheapest < IMPASSABLE) {
-                        cheapestPositions.add(Position(fx, fy))
+                        cheapestPositions.add(fx to fy)
                     }
                 }
             }

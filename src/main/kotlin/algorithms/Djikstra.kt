@@ -1,17 +1,20 @@
 package algorithms
 
-import data.Position
 import java.util.LinkedList
 
 const val IMPASSABLE = Int.MAX_VALUE
 
 class Djikstra {
+    private data class Position(
+        val x: Int,
+        val y: Int
+    )
 
     fun floodFill(
         width: Int,
         height: Int,
-        goalMatrix: EntityPresenceMatrix,
-        obstacleMatrix: EntityPresenceMatrix
+        goalMatrix: Array<Array<Int>>,
+        obstacleMatrix: Array<Array<Int>>
     ) : Array<Array<Int>>{
         fun getNeighbours(
             closedGrid: Array<Array<Int>>,
@@ -30,17 +33,17 @@ class Djikstra {
             return neighbours
         }
 
-        val djikstraGrid = Array(width) { rows ->
-            Array(height) { cell ->
+        val djikstraGrid = Array(width) {
+            Array(height) {
                 IMPASSABLE
             }
         }
 
         val startingPositions = mutableListOf<Position>()
         val frontier = LinkedList<Position>()
-        val closedGrid = obstacleMatrix.costs
+        val closedGrid = obstacleMatrix.copyOf()
 
-        goalMatrix.costs.forEachIndexed { x, row ->
+        goalMatrix.forEachIndexed { x, row ->
             row.forEachIndexed { y, cell ->
                 if (cell == 0) {
                     djikstraGrid[x][y] = 0

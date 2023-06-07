@@ -1,11 +1,9 @@
 package serialization
 
-import data.Position
 import entities.Grass
 import entities.Monster
 import entities.Player
 import entities.Wall
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.json.Json
 import state.LocalMapState
 import java.io.File
@@ -33,123 +31,67 @@ class LocalMapLoader {
                     (0 until columns).flatMap { x ->
                         (0 until rows).map { y ->
                             Grass(
-                                position = MutableStateFlow(
-                                    Position(
-                                        x = x,
-                                        y = y
-                                    )
-                                )
+                                x = x,
+                                y = y
                             )
                         }
                     }.plus(
                         listOf(
                             Wall(
-                                position = MutableStateFlow(
-                                    Position(
-                                        x = 9,
-                                        y = 9
-                                    )
-                                )
+                                x = 9,
+                                y = 9
                             ),
                             Wall(
-                                position = MutableStateFlow(
-                                    Position(
-                                        x = 9,
-                                        y = 10
-                                    )
-                                )
+                                x = 9,
+                                y = 10
                             ),
                             Wall(
-                                position = MutableStateFlow(
-                                    Position(
-                                        x = 9,
-                                        y = 11
-                                    )
-                                )
+                                x = 9,
+                                y = 11
                             ),
                             Wall(
-                                position = MutableStateFlow(
-                                    Position(
-                                        x = 9,
-                                        y = 12
-                                    )
-                                )
+                                x = 9,
+                                y = 12
                             ),
                             Wall(
-                                position = MutableStateFlow(
-                                    Position(
-                                        x = 10,
-                                        y = 9
-                                    )
-                                )
+                                x = 10,
+                                y = 9
                             ),
                             Wall(
-                                position = MutableStateFlow(
-                                    Position(
-                                        x = 11,
-                                        y = 9
-                                    )
-                                )
+                                x = 11,
+                                y = 9
                             ),
                             Wall(
-                                position = MutableStateFlow(
-                                    Position(
-                                        x = 11,
-                                        y = 10
-                                    )
-                                )
+                                x = 11,
+                                y = 10
                             ),
                             Wall(
-                                position = MutableStateFlow(
-                                    Position(
-                                        x = 11,
-                                        y = 11
-                                    )
-                                )
+                                x = 11,
+                                y = 11
                             ),
                             Wall(
-                                position = MutableStateFlow(
-                                    Position(
-                                        x = 11,
-                                        y = 12
-                                    )
-                                )
+                                x = 11,
+                                y = 12
                             )
                         )
                     ).plus(
                         Player(
-                            position = MutableStateFlow(
-                                Position(
-                                    x = 10,
-                                    y = 3
-                                )
-                            )
+                            x = 10,
+                            y = 3
                         )
                     ).plus(
                         listOf(
                             Monster(
-                                position = MutableStateFlow(
-                                    Position(
-                                        x = 10,
-                                        y = 10
-                                    )
-                                )
+                                x = 10,
+                                y = 10
                             ),
                             Monster(
-                                position = MutableStateFlow(
-                                    Position(
-                                        x = 10,
-                                        y = 11
-                                    )
-                                )
+                                x = 10,
+                                y = 11
                             ),
                             Monster(
-                                position = MutableStateFlow(
-                                    Position(
-                                        x = 10,
-                                        y = 12
-                                    )
-                                )
+                                x = 10,
+                                y = 12
                             )
                         )
                     )

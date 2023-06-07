@@ -1,11 +1,9 @@
 package state
 
-import data.Position
 import entities.Entity
 import entities.HealthBar
 import input.CommandCode
 import input.InputManager
-import kotlinx.coroutines.flow.MutableStateFlow
 import swing.Game.Renderer.render
 
 class MenuState(
@@ -57,12 +55,8 @@ class MenuState(
     override val entities: List<Entity>
         get() = (0 until columns).map { column ->
             HealthBar(
-                position = MutableStateFlow(
-                    Position(
-                        x = column,
-                        y = 0
-                    )
-                )
+                x = column,
+                y = 0
             )
         }
 }
